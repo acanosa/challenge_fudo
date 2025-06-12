@@ -1,26 +1,22 @@
-require_relative 'user_service'
+require 'json'
+require_relative 'authentication_service'
 
 class LoginController
   def initialize()
-    @user_service = UserService.new()
+    @authentication_service = AuthenticationService.new()
   end
   
   def call(env)
-    user_service.f
+    request = Rack::Request.new(env)
+    body = JSON.parse(request.body.read)
+
+    case request.request_method
+      when "POST"
+
+        [200, {"content-type" => "text/plain"}, [@authentication_service.authenticate(body["username"], body["password"])]]
+      else
+        [405, {}, ["METHOD NOT ALLOWED: #{request.request_method}"]]
+    end
   end
 
-
-end
-require_relative 'product_repository'
-
-class Products
-  def initialize()
-    @product_repository = ProductRepository.new()
-  end
-
-  def call(env)
-    products = @product_repository.find_all
-    body= products.map { |product| "#{product.id} - #{product.name}"}.join("<br/>")
-    [200, {"content-type" => "text/html"}, [body]]
-  end
 end

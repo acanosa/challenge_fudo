@@ -11,12 +11,11 @@ class AuthenticationService
   end
 
   def authenticate(username, password)
-      password = encrypt(password)
-      user = @user_service.findByUsernameAndPassword(username, password)
-      generateToken(user)
+      user = @user_service.find_by_username_and_password(username, password)
+      generate_token(user)
   end
 
-  def decodeToken(token)
+  def decode_token(token)
     begin 
       JWT.decode(token, @rsa_public_key, true,  {algorithm: 'RS256'})
     rescue StandardError => exception
@@ -35,7 +34,7 @@ class AuthenticationService
     end
   end
 
-  def generateToken(user)
+  def generate_token(user)
     payload = {user_id: user.id, user_name: user.username, exp: Time.now.to_i + 3600}
     JWT.encode(payload, @rsa_private_key, 'RS256')
   end
