@@ -1,4 +1,5 @@
 source "https://rubygems.org"
 
 gem "rack"
+gem "jwt"
 gem "redcarpet"

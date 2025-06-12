@@ -1,0 +1,74 @@
+openapi: 3.1.1
+
+info:
+  title: challenge FUDO
+  summary: Un API en Ruby para challenge de FUDO 
+  description: API usando Ruby Rack que contiene la solución al enunciado del challenge
+  contact:
+    name: Alejandro Canosa
+    email: acanosa19@gmail.com
+  version: 1.0.0
+
+paths:
+  /login:
+    post:
+      description: User login
+  /authors:
+    description: Returns content of AUTHORS.md
+    responses:
+      '200':
+        description: Project authors
+  /openapi:
+    description: Returns this document contents
+    responses:
+      '200':
+        description: openapi.yaml content
+  /products:
+    get: 
+      description: Get list of products
+      responses:
+        '200':
+          description: Product list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      description: Product creation
+      requestBody:
+        description: Product name to create, must be unique
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPayload'
+      responses:
+        '202':
+          description: Request accepted and started processing
+
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+          - id
+          - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    ProductPayload:
+      type: object
+      required:
+       - name
+      properties:
+        name:
+          type: string
+
+
+
+
+
+
