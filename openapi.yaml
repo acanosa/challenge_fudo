@@ -12,7 +12,10 @@ info:
 paths:
   /login:
     post:
-      description: User login
+      description: User login. returns a token to use as Authorization for manipulating products. Expires in 1 hour
+      responses:
+        '200':
+          description: JWT token (TTL 1 hour)
   /authors:
     description: Returns content of AUTHORS.md
     responses:

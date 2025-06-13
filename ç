@@ -14,22 +14,22 @@ class Products
   def call(env)
     begin
       if !@authentication_service.is_valid_token?(env["HTTP_AUTHORIZATION"])
-        return [401, {"content-type" => "application/json"}, [{status: 401, message: "Invalid or missing token"}.to_json]]
+        return [401, {"content-type" => "text/html"}, ["Invalid or missing token"]]
       end
     rescue JWT::VerificationError => exception
       puts exception
-      return [401, {"content-type" => "application/json"}, [{status: 401, message: "Invalid or missing token"}.to_jsonn]] 
+      return [401, {"content-type" => "text/html"}, ["Invalid or missing token"]] 
     end
 
     request = Rack::Request.new(env)
     case request.request_method
       when "GET"
         products = @product_repository.find_all
-        response = products.map {|product| {id: product.id, name: product.name}}
-        [200, {"content-type" => "application/json"}, [response.to_json()]]
+        response = products.map |product| {id: product.id, name: product.name}
+        [200, {"content-type" => "text/html"}, [response.to_json()]]
       when "POST"
         if request.body.nil?
-          [400, {"content-type" => "application/json"}, [{status: 400, message: "Body with product information is mandatory"}.to_json]]
+          [400, {"content-type" => "text/html"}, ["Body with product information is mandatory"]]
         end
         body = JSON.parse(request.body.read)
         
@@ -38,9 +38,9 @@ class Products
           @product_service.create_product(body["name"])
         end 
 
-        [202, {"content-type" => "application/json"}, [{message: "Started processing..."}.to_json]]
+        [202, {"content-type" => "text/html"}, ["Started processing..."]]
       else
-        [405, {"content-type" => "application/json"}, [{status: 405, message: "METHOD NOT ALLOWED: #{request.request_method}"}.to_json]]
+        [405, {}, ["METHOD NOT ALLOWED: #{request.request_method}"]]
     end
   end
 end
