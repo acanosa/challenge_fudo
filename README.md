@@ -14,4 +14,4 @@
 3. Run with `rackup` in the root directory
 4. Go to `/openapi` to see the list of the endpoints and allowed methods
 
-*Note: if you are using Windows, you might need to configure your environment variables to run these commands in a console window.*
+*Note: if you are using Windows, you might need to configure your environment variables or restart your CLI to run these commands in a console window.*
