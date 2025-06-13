@@ -20,7 +20,6 @@ class ProductService
 
     @product_repository.save(name)
     puts "Saved product #{name}"
-
   end
 
 end
