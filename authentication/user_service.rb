@@ -27,5 +27,9 @@ class UserService
 
   end
 
+  def exists_by_username?(username)
+    @user_repository.exists_by_username(username)
+  end
+
 end
 

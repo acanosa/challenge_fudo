@@ -1,6 +1,8 @@
+require 'singleton'
 require_relative 'product'
 
 class ProductRepository
+    include Singleton
   attr_accessor :products
 
   def initialize()
@@ -8,7 +10,13 @@ class ProductRepository
   end
 
   def find_all()
-    return @products
+    @products
   end
+
+  def save(name)
+    toSave = Product.new(@products.size + 1, name)
+    @products << toSave
+  end
+
 end
 

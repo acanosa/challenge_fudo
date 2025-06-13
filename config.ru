@@ -1,4 +1,5 @@
 require "rack/static"
+require "rack/deflater"
 require_relative "products/products_controller"
 require_relative "authentication/login_controller"
 
@@ -13,6 +14,10 @@ use Rack::Static, :urls => {"/openapi" => "openapi.yaml", "/authors" => "AUTHORS
        'content-type' => 'text/markdown'
     }]
   ]
+
+use Rack::Deflater, if: ->(env, status, headers, body) {
+  env['HTTP_ACCEPT_ENCODING'].to_s.include?('gzip')
+}
 
 app = Rack::URLMap.new "/products" => Products.new, "/login" => LoginController.new
 

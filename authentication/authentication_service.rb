@@ -2,17 +2,34 @@ require 'jwt'
 require 'bcrypt'
 require_relative 'user_service'
 
+KEYPAIR = OpenSSL::PKey::RSA.generate(2048)
 class AuthenticationService
 
   def initialize()
-    @rsa_private_key = OpenSSL::PKey::RSA.generate(2048)
-    @rsa_public_key = @rsa_private_key.public_key
+    @rsa_private_key = KEYPAIR
+    @rsa_public_key = KEYPAIR.public_key
     @user_service = UserService.new() 
   end
 
   def authenticate(username, password)
       user = @user_service.find_by_username_and_password(username, password)
       generate_token(user)
+  end
+
+  def is_valid_token?(token)
+    return false if token.nil?
+
+    match = token.match(/Bearer\s+(.*)$/)
+    return false unless match
+
+    token = match[1]
+
+    token = decode_token(token)
+    return false unless token
+
+    payload = token[0]
+    @user_service.exists_by_username?(payload["user_name"])
+  
   end
 
   def decode_token(token)
