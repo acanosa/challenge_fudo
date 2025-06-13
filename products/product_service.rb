@@ -13,6 +13,11 @@ class ProductService
       return [400, {"content-type" => "text/html"}, ["Attribute 'name' is mandatory"]]
     end
 
+    if @product_repository.exists_by_name?(name)
+      puts "Product with name #{name} already exists"
+      return [400, {"content-type" => "text/html"}, ["Product with name #{name} already exists"]]
+    end
+
     @product_repository.save(name)
     puts "Saved product #{name}"
 

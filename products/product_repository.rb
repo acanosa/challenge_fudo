@@ -18,5 +18,9 @@ class ProductRepository
     @products << toSave
   end
 
+  def exists_by_name?(name)
+    @products.any? {|product| product.name == name}
+  end
+
 end
 

@@ -28,6 +28,9 @@ class Products
         body= products.map { |product| "#{product.id} - #{product.name}"}.join("<br/>")
         [200, {"content-type" => "text/html"}, [body]]
       when "POST"
+        if request.body.nil?
+          [400, {"content-type" => "text/html"}, ["Body with product information is mandatory"]]
+        end
         body = JSON.parse(request.body.read)
         
         Thread.new do
